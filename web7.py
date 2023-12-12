@@ -26,8 +26,18 @@ diagnosis_dtr = ''
 
 if st.button('Test Prediksi Diabetes'):
     input_data = [[age, gender, impluse, pressurehight, pressurelow, glucose, kcm, troponin]]
+      # Convert input_data to a numpy array
+    input_data_asarray = np.asarray(input_data)
 
-    if diabetes_model_dtr.predict(input_data)[0] == 1:
+    # Reshape the input_data_asarray
+    input_reshaped = input_data_asarray.reshape(1, -1)
+
+    # Use loaded_model for prediction
+    prediction = loaded_model.predict(input_reshaped)
+    
+    if prediction[0] == 1:
         diagnosis_dtr = "Pasien terkena diabetes (dtr)"
     else:
         diagnosis_dtr = "Pasien tidak terkena diabetes (dtr)"
+
+st.write(diagnosis_dtr)
