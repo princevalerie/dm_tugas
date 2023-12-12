@@ -1,12 +1,9 @@
 import streamlit as st
 import pickle
-import numpy
+import numpy as np
 
-# Assuming 'decision_tree_model' is your Decision Tree model
-with open('decisiontree_model3.pkl', 'wb') as file:
-    pickle.dump("DecisionTree", file)
-
-diabetes_model_dtr = pickle.load(open('decisiontree_model3.pkl', 'rb'))
+# Load the model
+loaded_model = pickle.load(open('dtr4_model.sav', 'rb'))
 
 st.title("Prediksi diabetes menggunakan 3 model machine learning")
 
@@ -27,19 +24,23 @@ diagnosis_dtr = ''
 
 if st.button('Test Prediksi Diabetes'):
     input_data = [[age, gender, impluse, pressurehight, pressurelow, glucose, kcm, troponin]]
-    
-    # Convert input_data to a numpy array
-    input_data_asarray = np.asarray(input_data)
 
-    # Reshape the input_data_asarray
-    input_reshaped = input_data_asarray.reshape(1, -1)
+    try:
+        # Convert input_data to a NumPy array
+        input_data_asarray = np.asarray(input_data, dtype=np.float32)  # Adjust the dtype if needed
 
-    # Use loaded_model for prediction
-    prediction = loaded_model.predict(input_reshaped)
+        # Reshape the input_data_asarray
+        input_reshaped = input_data_asarray.reshape(1, -1)
 
-    if prediction[0] == 1:
-        diagnosis_dtr = "Pasien terkena diabetes (dtr)"
-    else:
-        diagnosis_dtr = "Pasien tidak terkena diabetes (dtr)"
+        # Use loaded_model for prediction
+        prediction = loaded_model.predict(input_reshaped)
+
+        if prediction[0] == 1:
+            diagnosis_dtr = "Pasien terkena diabetes (dtr)"
+        else:
+            diagnosis_dtr = "Pasien tidak terkena diabetes (dtr)"
+
+    except Exception as e:
+        st.error(f"Error: {e}")
 
 st.write(diagnosis_dtr)
