@@ -1,5 +1,6 @@
 import streamlit as st
 import pickle
+import numpy
 
 # Assuming 'decision_tree_model' is your Decision Tree model
 with open('decisiontree_model3.pkl', 'wb') as file:
